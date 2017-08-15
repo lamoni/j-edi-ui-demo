@@ -1,0 +1,283 @@
+<div id="content">
+    <div class="row">
+        <sa-big-breadcrumbs [items]="['Service List']" icon="bar-chart-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></sa-big-breadcrumbs>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-lg-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="well well-sm well-light">
+
+                            <div *ngIf="(services | json) === '[]' then servicesDontExist else servicesExist"></div>
+
+                            <ng-template #servicesExist>
+                                <table class="table table-bordered">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Service Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let serviceName of services">
+                                            <td class="text-center">
+                                                <a class="btn btn-default btn-block" (click)="getServiceDetails(serviceName);">{{serviceName}}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="btn btn-default" href="javascript:void(0);">Status</a>
+                                                <!--<a class="btn btn-warning " href="javascript:void(0);">Edit</a>-->
+                                                <a class="btn btn-danger " (click)="deleteService(serviceName);">Delete</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </ng-template>
+                            <ng-template #servicesDontExist>
+                                <div class="text-center font-lg">
+                                    No Services
+                                </div>
+                            </ng-template>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="L3VPN_serviceDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addIconLabel">{{serviceDetailName}}</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-bordered">
+
+                        <thead>
+                        <tr>
+                            <th class="text-center">Device Name</th>
+                            <th class="text-center">Interface Name</th>
+                            <th class="text-center">Interface Address</th>
+                            <th class="text-center">Neighbor Address</th>
+                            <th class="text-center">Peer AS</th>
+                            <th class="text-center">Route Distinguisher</th>
+                            <th class="text-center">VRF Target</th>
+                            <th class="text-center">Input Policer</th>
+                            <th class="text-center">Output Policer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let serviceDevice of serviceDetails">
+                            <td class="text-center">
+                                {{serviceDevice.deviceName}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['interface_name']}}.{{serviceDevice.template_vars['unit']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['localAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['neighborAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['peerAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeDistinguisher']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeTarget']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['inputPolicerName']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['outputPolicerName']}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="L2VPN_serviceDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addIconLabel">{{serviceDetailName}}</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-bordered">
+
+                        <thead>
+                        <tr>
+                            <th class="text-center">Device Name</th>
+                            <th class="text-center">Instance Name</th>
+
+                            <th class="text-center">Service ID</th>
+                            <th class="text-center">Site Identifier</th>
+                            <th class="text-center">Remote Site Identifier</th>
+                            <th class="text-center">Route Distinguisher</th>
+                            <th class="text-center">VRF Target</th>
+                            <th class="text-center">Input Policer</th>
+                            <th class="text-center">Output Policer</th>
+                            <th class="text-center">Interface Name</th>
+                            <th class="text-center">VLAN Tag</th>
+                            <th class="text-center">Inner VLAN Tag</th>
+
+
+                        </tr> d
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let serviceDevice of serviceDetails">
+                            <td class="text-center">
+                                {{serviceDevice.deviceName}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['instance_name']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['serviceId']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['siteIdentifier']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['remoteSiteIdentifier']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeDistinguisher']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeTarget']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['inputPolicerName']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['outputPolicerName']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['interface_name']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['vlanTag']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['innerVlanTag']}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="EVPN_serviceDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addIconLabel">{{serviceDetailName}}</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-bordered">
+
+                        <thead>
+                        <tr>
+                            <th class="text-center">Device Name</th>
+                            <th class="text-center">Interface Name</th>
+                            <th class="text-center">Interface Address</th>
+                            <th class="text-center">Neighbor Address</th>
+                            <th class="text-center">Peer AS</th>
+                            <th class="text-center">Route Distinguisher</th>
+                            <th class="text-center">VRF Target</th>
+                            <th class="text-center">Input Policer</th>
+                            <th class="text-center">Output Policer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let serviceDevice of serviceDetails">
+                            <td class="text-center">
+                                {{serviceDevice.deviceName}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['interface_name']}}.{{serviceDevice.template_vars['unit']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['localAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['neighborAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['peerAddress']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeDistinguisher']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['routeTarget']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['inputPolicerName']}}
+                            </td>
+                            <td class="text-center">
+                                {{serviceDevice.template_vars['outputPolicerName']}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

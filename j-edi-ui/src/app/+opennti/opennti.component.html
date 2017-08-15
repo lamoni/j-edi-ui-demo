@@ -1,0 +1,249 @@
+<div id="content">
+    <div class="row">
+        <sa-big-breadcrumbs [items]="['Open NTI']" icon="bar-chart-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></sa-big-breadcrumbs>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-lg-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="well well-sm well-light">
+                        <p>Please select a Start Date and End Date for viewing telemetry data.</p>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" [(ngModel)]="data.fromDate" #toDate="ngModel" [saUiDatepicker]="{
+                                    dateFormat: 'mm/dd/yy',
+                                    defaultDate: '+1w',
+                                    changesMonth: true,
+                                    numberOfMonth: 3,
+                                    minRestrict: '#to'
+                                 }" type="text" placeholder="From Date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" [(ngModel)]="data.toDate" #toDate="ngModel" [saUiDatepicker]="{
+                                    dateFormat: 'mm/dd/yy',
+                                    defaultDate: '+3w',
+                                    changesMonth: true,
+                                    numberOfMonth: 3,
+                                    maxRestrict: '#from'
+                                 }" type="text" placeholder="To Date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <!--<label>Timepicker (default):</label>-->
+                                    <div class="input-group">
+                                        <input class="form-control" smartTimepicker id="fromTime" type="text" placeholder="Select time">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <!--<label>Timepicker (default):</label>-->
+                                    <div class="input-group">
+                                        <input class="form-control" id="toTime" smartTimepicker type="text" placeholder="Select time">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="well well-sm well-light">
+                        <form class="smart-form" #mainForm="ngForm" (ngSubmit)="onSubmit()">
+                            <p style="margin-bottom: 9px;">Please select query data.</p>
+                            <div class="row">
+                                <section class="col col-sm-3">
+                                    <label class="input">
+                                    <input type="text" list="list" placeholder="Host Regex" id="hostRegex" 
+                                        name="hostRegex" [(ngModel)]="data.hostRegex" #hostRegex="ngModel"
+                                        (change)="loadInterfacesForDevice()">
+                                    <datalist id="list">
+                                        <option *ngFor="let host of hostRegexs" value="{{host.value}}">{{host.value}}</option>
+                                    </datalist>
+                                </label>
+                                </section>
+                                <section class="col col-sm-3">
+                                    <label class="input">
+                                        <input type="text" list="interfaceList" placeholder="Interface" id="interface" 
+                                            name="interface" [(ngModel)]="data.interface" #interface="ngModel" >
+                                        <datalist id="interfaceList">
+                                            <option *ngFor="let interface of interfaces" value="{{interface.value}}">{{interface.value}}</option>
+                                        </datalist>
+                                    </label>
+                                </section>
+                                <section class="col col-sm-3">
+                                    <label class="input">
+                                    <input type="text" list="metricList" placeholder="Metric" id="metric"
+                                        name="metric" [(ngModel)]="data.metric" #metric="ngModel" >
+                                    <datalist id="metricList">
+                                        <option *ngFor="let metric of metrics" value="{{metric.value}}">{{metric.value}}</option>
+                                    </datalist>
+                                </label>
+                                </section>
+                                <section class="col col-sm-3">
+                                    <button type="button" class="btn btn-primary btn-xs" (click)="addGraph($event)">Query</button>
+                                </section>
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <sa-widgets-grid>
+                <!-- row -->
+                <div class="row">
+                    <jedi-wdgt-cntnr></jedi-wdgt-cntnr>
+                </div>
+            </sa-widgets-grid>
+        </div>
+        <!--<div class="col-md-4 col-lg-3">-->
+            <!--<div class="row">-->
+                <!--<div class="col-sm-12">-->
+                    <!--<div class="panel panel-default">-->
+                        <!--<div class="panel-body status smart-form vote">-->
+                            <!--<div class="who clearfix">-->
+                                <!--<p>Available Dashboard Views</p>-->
+                            <!--</div>-->
+                            <!--<ul class="comments">-->
+                                <!--<li *ngFor="let view of data.views">-->
+                                    <!--<label class="radio">-->
+                    <!--<input name="graphView" [value]="view.title" [(ngModel)]="defaultChoice" (change)="onChange($event)" type="radio">-->
+                    <!--<i></i>{{view.title}}</label>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                            <!--&lt;!&ndash; postInfluxDbQuery &ndash;&gt;-->
+
+                                    <!--<label class="input">-->
+                                        <!--<input type="text" [(ngModel)]="data.influxQuery" #influxQuery="ngModel" placeholder="query" name="influxQuery" id="influxQuery"  />-->
+                                    <!--</label>-->
+                                    <!--<button type="button" class="btn btn-primary btn-xs" (click)="onQueryClick($event)">Query</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="col-sm-12">-->
+                    <!--<accordion [closeOthers]="true">-->
+                        <!--<accordion-group [isOpen]="false" heading="Collapsible Group Item #1">-->
+
+                            <!--<div class="panel-collapse">-->
+                                <!--<div class="panel-body no-padding">-->
+                                    <!--<table class="table table-bordered table-condensed">-->
+                                        <!--<thead>-->
+                                            <!--<tr>-->
+                                                <!--<th>Column name</th>-->
+                                                <!--<th>Column name</th>-->
+                                                <!--<th>Column name</th>-->
+                                                <!--<th>Column name</th>-->
+                                            <!--</tr>-->
+                                        <!--</thead>-->
+                                        <!--<tbody>-->
+                                            <!--<tr>-->
+                                                <!--<td>Row 1</td>-->
+                                                <!--<td>Row 2</td>-->
+                                                <!--<td>Row 3</td>-->
+                                                <!--<td>Row 4</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<td>Row 1</td>-->
+                                                <!--<td>Row 2</td>-->
+                                                <!--<td>Row 3</td>-->
+                                                <!--<td>Row 4</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<td>Row 1</td>-->
+                                                <!--<td>Row 2</td>-->
+                                                <!--<td>Row 3</td>-->
+                                                <!--<td>Row 4</td>-->
+                                            <!--</tr>-->
+                                        <!--</tbody>-->
+                                    <!--</table>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</accordion-group>-->
+                        <!--<accordion-group #group>-->
+                            <!--<div accordion-heading>-->
+                                        <!--<label class="checkbox">-->
+                                                    <!--<input checked type="checkbox">-->
+                                                    <!--<i></i>Fun Data in Chart1 </label>-->
+                                <!--<i class="pull-right float-xs-right glyphicon font-size: 0.9em" [ngClass]="{'glyphicon-chevron-up': group?.isOpen, 'glyphicon-chevron-down': !group?.isOpen}"></i>-->
+                            <!--</div>-->
+                            <!--<div id="collapseTwo" class="panel-collapse">-->
+                                <!--<div class="panel-body">-->
+                                    <!--Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute,-->
+                                    <!--non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch-->
+                                    <!--3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda-->
+                                    <!--shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt-->
+                                    <!--sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer-->
+                                    <!--farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them-->
+                                    <!--accusamus labore sustainable VHS.-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</accordion-group>-->
+                        <!--<accordion-group heading="Collapsible Group Item #3">-->
+                            <!--<div id="collapseThree" class="panel-collapse">-->
+                                <!--<div class="panel-body">-->
+                                    <!--Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute,-->
+                                    <!--non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch-->
+                                    <!--3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda-->
+                                    <!--shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt-->
+                                    <!--sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer-->
+                                    <!--farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them-->
+                                    <!--accusamus labore sustainable VHS.-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</accordion-group>-->
+                    <!--</accordion>-->
+                    <!--<div class="panel panel-default">-->
+                        <!--<div class="panel-body status smart-form vote">-->
+                            <!--<div class="who clearfix">-->
+                                <!--<p>Add a New Chart to the View</p>-->
+                            <!--</div>-->
+                            <!--<ul class="comments">-->
+                                <!--<li>-->
+                                    <!--<label class="checkbox">-->
+                                                    <!--<input type="checkbox" (click)='onClick($event, "Traffic Statistics", "1,2")'>-->
+                                                    <!--<i></i>Traffic Statistics </label>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<label class="checkbox">-->
+                                                    <!--<input type="checkbox" (click)='onClick($event, "Interface Error Statistics", "3")'>-->
+                                                    <!--<i></i>Inteface Error Statistics </label>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<label class="checkbox">-->
+                                                    <!--<input type="checkbox" (click)='onClick($event, "Interface Traffic", "4")'>-->
+                                                    <!--<i></i>Interface Traffic </label>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<label class="checkbox">-->
+                                                    <!--<input type="checkbox" (click)='onClick($event, "Inteface Queue Statistics", "5")'>-->
+                                                    <!--<i></i>Inteface Queue Statistics</label>-->
+                                <!--</li>-->
+                                <!--<li class="text-right">-->
+                                    <!--<a href="javascript:void(0);" (click)="onShowAlert()" class="btn btn-xs btn-primary">Save As View</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>

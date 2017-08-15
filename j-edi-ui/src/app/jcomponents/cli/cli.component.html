@@ -1,0 +1,91 @@
+      <!-- NEW COL START -->
+      <article class="col-xs-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [custombutton]="false">
+          <!-- widget options:
+          usage: <div class="jarviswidget" id="wid-id-0" [editbutton]="false">
+
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [collapsed]="true"
+          [sortable]="false"
+
+          -->
+          <header>
+            <span class="widget-icon"> <i class="fa fa-gears"></i> </span>
+
+            <h2>Junos CLI</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+
+              <form class="smart-form" #mainForm="ngForm"  (ngSubmit)="onSubmit()">
+                <header>
+                  Run Junos CLI
+                </header>
+
+                <fieldset>
+                  <section>
+                    <label class="label">Endpoint</label>
+                    <label class="input">
+                        <input type="text" placeholder="command endpoint" id="name" class="input-sm" required  maxlength="50"
+                        name="endpoint" [(ngModel)]="command.cli.tgt" #endpoint="ngModel" >
+                    </label>
+                  </section>
+
+                  <section>
+                    <label class="label">CLI Command</label>
+                    <label class="input">
+                    <input type="text" id="cli" placeholder="junos.cli" class="input-sm" required minlength="4" maxlength="50"
+                        name="cli" [(ngModel)]="command.cli.fun" #cli="ngModel" >
+                    </label>
+
+                  </section>
+
+                  <section>
+                    <label class="label">Arg1</label>
+                    <label class="input">
+                        <input type="text" id="arg" placeholder="show interface terse" class="input-sm" minlength="1" maxlength="50"
+                        name="arg" [(ngModel)]="command.cli.arg" #arg="ngModel" >
+                    </label>
+                  </section>
+
+                </fieldset>
+                <fieldset>
+                    <section>
+                        <label class="label">Results</label>
+                        <pre *ngIf="jobResultObject">
+                            {{jobResultObject | json}}
+                        </pre>
+                        <pre *ngIf="jobResultDump">{{jobResultDump}}</pre>
+                    </section>
+                </fieldset>
+
+                <footer>
+                    <button type="submit" class="btn btn-primary" title="Submit" [disabled]="!mainForm.form.valid">Submit</button>
+                  <button type="button" class="btn btn-default" onclick="window.history.back();">
+                    Back
+                  </button>
+                </footer>
+              </form>
+
+            </div>
+            <!-- end widget content -->
+
+          </div>
+          <!-- end widget div -->
+
+        </sa-widget>
+        <!-- end widget -->
+
+      </article>

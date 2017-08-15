@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  node:
+    container_name: node-jedi
+    volumes:
+      - "./app:/var/app"
+      - "/var/app/node_modules"
+    build:
+      context:  .
+      dockerfile: node.dockerfile
+    ports:
+      - "9090:9090"
+      # - "8000:8000"
+    environment:
+      - REDIS_SERVER=redis
+      - SALT_BUS=http://10.161.41.12:8000
+      - INFLUX_URL=10.161.41.13:8086
+      - INFLUX_DB=juniper
+      - INFLUX_USER=juniper
+      - INFLUX_PW=juniper
+    image: node/jedi
+    networks:
+      - default_network
+
+  j-edi-ui:
+    container_name: j-edi-ui
+    volumes:
+      - "./j-edi-ui:/var/j-edi-ui"
+      - "/var/j-edi-ui/node_modules"
+    build:
+      context:  .
+      dockerfile: j-edi.dockerfile
+    ports:
+      - "4200:4200"
+    image: jedi-ui
+    networks:
+      - default_network
+
+  redis:
+    container_name: redis
+    image:  redis:3.0-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - default_network
+
+networks:
+  default_network:
+    driver: bridge

@@ -1,0 +1,10 @@
+.vagrant
+app/node_modules
+j-edi-ui/node_modules
+.vscode
+j-edi-ui/dist
+dist
+public
+.editorconfig
+*.log
+.jsbeautifyrc

@@ -1,0 +1,24 @@
+{
+  "name": "jedi-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN index.js",
+  "devDependencies": {},
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
+    "eventsource": "^1.0.0",
+    "express": "^4.15.2",
+    "influx": "^5.0.7",
+    "redis": "^2.7.1",
+    "request": "^2.81.0",
+    "url": "^0.11.0",
+    "ws": "^2.2.3"
+  }
+}

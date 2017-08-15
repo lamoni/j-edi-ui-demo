@@ -1,0 +1,220 @@
+<!-- MAIN CONTENT -->
+<div id="content">
+    <div class="row">
+        <sa-big-breadcrumbs [items]="['Orchestration', 'EVPN']" icon="gears" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></sa-big-breadcrumbs>
+    </div>
+
+    <!-- widget grid -->
+    <sa-widgets-grid>
+
+        <!-- START ROW -->
+
+        <div class="row">
+
+            <!-- NEW COL START -->
+            <article class="col-lg-12">
+
+                <!-- Widget ID (each widget will need unique ID)-->
+                <sa-widget [colorbutton]="false" [editbutton]="false" [custombutton]="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-gears"></i> </span>
+                        <h2>EVPN Service</h2>
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <form class="smart-form" #mainForm="ngForm" (ngSubmit)="onSubmit()">
+                                <header>
+                                    Create EVPN Service
+                                </header>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label for="serviceName">Service Name</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="90L2VPN" id="serviceName"
+                                                       class="form-control" required maxlength="50"
+                                                       name="serviceName" [(ngModel)]="l2vpn.serviceName"
+                                                       #serviceName="ngModel">
+                                            </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <label for="serviceId">Service Id</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="90" id="serviceId"
+                                                       class="form-control" required maxlength="50"
+                                                       name="serviceId" [(ngModel)]="l2vpn.serviceId"
+                                                       #serviceName="ngModel">
+                                            </label>
+
+                                        </section>
+                                        <section class="col col-4">
+                                            <label for="routeTarget">Route Target</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="target:65000:90" id="routeTarget"
+                                                       class="form-control" required maxlength="50"
+                                                       name="routeTarget" [(ngModel)]="l2vpn.routeTarget"
+                                                       #routeTarget="ngModel">
+                                            </label>
+                                        </section>
+
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-3">
+                                            <label for="deviceName">Device Name</label>
+                                            <label class="input">
+                                                <input type="text" list="list" placeholder="vmx01" id="deviceName"
+                                                       name="deviceName" [(ngModel)]="endpoint.deviceName"
+                                                       #interfaceName="ngModel"
+                                                        (change)="getInterfaceList()">
+                                                <datalist id="list">
+                                                    <option *ngFor="let device of deviceList" value="{{device}}">
+                                                        {{device}}
+                                                    </option>
+                                                </datalist>
+                                            </label>
+                                            <div class="note">
+                                                <strong>Note:</strong> this is a type ahead field.
+                                            </div>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="interface">Interface</label>
+                                            <label class="input">
+                                                <input type="text" list="interfaceList" placeholder="ge-0/0/0" id="interface"
+                                                       name="interface" [(ngModel)]="endpoint.interface"
+                                                       #routerInterface="ngModel">
+                                                <datalist id="interfaceList">
+                                                    <option *ngFor="let iface of interfaceList" value="{{iface}}">
+                                                        {{iface}}
+                                                    </option>
+                                                </datalist>
+                                            </label>
+                                            <div class="note">
+                                                <strong>Note:</strong> this is a type ahead field.
+                                            </div>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="outerVlanTag">Outer VLAN Tag</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="4090" id="outerVlanTag"
+                                                       class="form-control" maxlength="50"
+                                                       name="outerVlanTag" [(ngModel)]="endpoint.outerVlanTag" #outerVlanTag="ngModel">
+                                            </label>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="vlanTag">Inner VLAN Tag</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="90" id="vlanTag"
+                                                       class="form-control" maxlength="50"
+                                                       name="vlanTag" [(ngModel)]="endpoint.vlanTag" #vlanTag="ngModel">
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-3">
+                                            <label for="siteIdentifier">Site Identifier</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="2" id="siteIdentifier"
+                                                       class="form-control" maxlength="50"
+                                                       name="siteIdentifier" [(ngModel)]="endpoint.siteIdentifier"
+                                                       #siteIdentifier="ngModel">
+                                            </label>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="remoteSiteIdentifier">Remote Site Identifier</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="1" id="remoteSiteIdentifier"
+                                                       class="form-control" maxlength="50"
+                                                       name="siteIdentifier" [(ngModel)]="endpoint.remoteSiteIdentifier"
+                                                       #remoteSiteIdentifier="ngModel">
+                                            </label>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="inputPolicer">Input Policer</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="5000M-SERVICE-POLICER" id="inputPolicer"
+                                                       class="form-control" maxlength="50"
+                                                       name="inputPolicer" [(ngModel)]="endpoint.inputPolicerName"
+                                                       #inputPolicer="ngModel">
+                                            </label>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label for="outputPolicer">Ouput Policer</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="5000M-SERVICE-POLICER" id="outputPolicer"
+                                                       class="form-control" maxlength="50"
+                                                       name="outputPolicer" [(ngModel)]="endpoint.outputPolicerName"
+                                                       #peerAddress="ngModel">
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                         <section class="col col-3">
+                                            <label for="routeDistinguisher">Route Distinguisher</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="11.0.0.11:90"
+                                                       id="routeDistinguisher" class="form-control" maxlength="50"
+                                                       name="routeDistinguisher" [(ngModel)]="endpoint.routeDistinguisher"
+                                                       #routeDistinguisher="ngModel">
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <button (click)="onEndpointAdd($event)" type="button"
+                                                    class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                                            </button>
+                                        </section>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <section>
+                                        <table class="table table-hover table-condensed">
+                                            <thead>
+                                            <tr>
+                                                <th>Device Name</th>
+                                                <th>Interface</th>
+                                                <th>Site Identifier</th>
+                                                <th>Route Distinguisher</th>
+                                                <th>VlanTag</th>
+                                                <th>Input Policer</th>
+                                                <th>Output Policer</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let endpoint of l2vpn.endpoints">
+                                                <td>{{endpoint.deviceName}}</td>
+                                                <td>{{endpoint.interface}}</td>
+                                                <td>{{endpoint.siteIdentifier}}</td>
+                                                <td>{{endpoint.routeDistinguisher}}</td>
+                                                <td>{{endpoint.vlanTag}}</td>
+                                                <td>{{endpoint.inputPolicerName}}</td>
+                                                <td>{{endpoint.outputPolicerName}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" title="Submit" [disabled]="!mainForm.form.valid">Submit</button>
+                                    <button type="button" class="btn btn-default" onclick="window.history.back();">
+                                        Back
+                                    </button>
+                                </footer>
+                            </form>
+                            <!-- end widget grid -->
+                        </div>
+                    </div>
+                </sa-widget>
+            </article>
+        </div>
+    </sa-widgets-grid>
+</div>

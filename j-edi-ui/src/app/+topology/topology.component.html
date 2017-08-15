@@ -1,0 +1,531 @@
+<div id="content">
+    <div class="row">
+        <sa-big-breadcrumbs [items]="['Live Topology']" icon="puzzle-piece"
+                            class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></sa-big-breadcrumbs>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Add Network Device modal -->
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addNetworkDevice">
+                        Add Network Device
+                    </button>
+                    <!-- SaveTopology modal-->
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#saveTopology">
+                        Save Topology
+                    </button>
+                    <!-- Clear Canvas modal-->
+                    <button type="button" class="btn btn-default" (click)="clearTopology();">
+                        New Topology
+                    </button>
+                    <!-- List Toplogies modal-->
+                    <button type="button" class="btn btn-default" (click)="listTopologies();">
+                        List Topologies
+                    </button>
+                    <!-- List Toplogies modal-->
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#loadTopology">
+                        Load Topology
+                    </button>
+                    <div class="well well-sm well-light">
+                        <div id="network_topology_0" style="border: 1px solid #000;
+                                    width:1300px;
+                                    height:2000px;
+                                    position:relative;
+                                    ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="well well-sm well-light">
+                        <form #postForm="ngForm" (ngSubmit)="onPostSubmit(postForm)" class="smart-form">
+                            <header>Post Key To Redis</header>
+                            <fieldset>
+                                <section *ngIf="showSuccess">
+                                    <div class="alert alert-success fade in">
+                                        <button class="close" (click)="showSuccess=false;" data-dismiss="alert">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-check"></i>
+                                        <strong>Success</strong> Added the Key
+                                    </div>
+                                </section>
+                                <section *ngIf="showFail">
+                                    <div class="alert alert-danger fade in">
+                                        <button class="close" (click)="showSuccess=false;" data-dismiss="alert">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-times"></i>
+                                        <strong>Error!</strong> There was an error
+                                    </div>
+                                </section>
+                                <section>
+                                    <label class="label">Key Name</label>
+                                    <label class="input">
+                                        <input type="text" [(ngModel)]="postData.key" #key="ngModel" name="key"
+                                               class="input-sm">
+                                    </label>
+                                </section>
+                                <section>
+                                    <label class="label">Key Value</label>
+                                    <label class="textarea">
+                                        <textarea spellcheck="false" [(ngModel)]="postData.data" #data="ngModel"
+                                                  name="data" rows="3" class="custom-scroll"></textarea>
+                                    </label>
+                                    <div class="note">
+                                        <strong>Note:</strong> put your json here to save to redis
+                                    </div>
+                                </section>
+                            </fieldset>
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-default"
+                                        (click)="postForm.reset(); showSuccess=false;">
+                                    Clear
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="well well-sm well-light">
+                        <form #getForm="ngForm" (ngSubmit)="onGetSubmit(getForm)" class="smart-form">
+                            <header>Get Key From Redis</header>
+                            <fieldset>
+                                <section>
+                                    <label class="label">Key Name</label>
+                                    <label class="input">
+                                        <input type="text" [(ngModel)]="getData.key" #key="ngModel" name="key"
+                                               class="input-sm">
+                                    </label>
+                                </section>
+                                <section>
+                                    <label class="label">Key Value</label>
+                                    <label class="textarea">
+                                        <textarea spellcheck="false" [(ngModel)]="getData.data" #data="ngModel"
+                                                  name="value" disabled="disabled" rows="3"
+                                                  class="custom-scroll"></textarea>
+                                    </label>
+                                    <div class="note">
+                                        <strong>Note:</strong> read-only
+                                    </div>
+                                </section>
+                            </fieldset>
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    Get
+                                </button>
+                                <button type="button" class="btn btn-default" (click)="getForm.reset()">
+                                    Clear
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="well well-sm well-light">
+                        <form #deleteForm="ngForm" (ngSubmit)="onDeleteSubmit(deleteForm)" class="smart-form">
+                            <header>Delete Key From Redis</header>
+                            <fieldset>
+                                <section *ngIf="deleteSuccess">
+                                    <div class="alert alert-success fade in">
+                                        <button class="close" (click)="deleteSuccess=false;" data-dismiss="alert">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-check"></i>
+                                        <strong>Success</strong> Deleted the Key
+                                    </div>
+                                </section>
+                                <section *ngIf="deleteFail">
+                                    <div class="alert alert-danger fade in">
+                                        <button class="close" (click)="deleteSuccess=false;" data-dismiss="alert">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-times"></i>
+                                        <strong>Error!</strong> There was an error
+                                    </div>
+                                </section>
+                                <section>
+                                    <label class="label">Key Name</label>
+                                    <label class="input">
+                                        <input type="text" [(ngModel)]="deleteData.key" #key="ngModel" name="key"
+                                               class="input-sm">
+                                    </label>
+                                </section>
+                            </fieldset>
+                            <footer>
+                                <button type="submit" class="btn btn-danger">
+                                    Delete
+                                </button>
+                                <button type="button" class="btn btn-default" (click)="getForm.reset()">
+                                    Clear
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icon Details Modal -->
+    <div class="modal fade" id="iconDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="iconDetailsLabel">Details for {{ deviceDetails.deviceName }}</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="iconDetailsTab" class="nav nav-tabs bordered">
+                        <li class="active">
+                            <a href="#s0" data-toggle="tab">
+                                <i class="fa fa-fw fa-lg fa-empire"></i>
+                                Facts
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#s1" data-toggle="tab">
+                                <i class="fa fa-fw fa-lg fa-rebel"></i>
+                                Environment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#s2" data-toggle="tab">
+                                <i class="fa fa-fw fa-lg fa-tachometer"></i>
+                                Performance
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#s3" data-toggle="tab">
+                                <i class="fa fa-fw fa-lg fa-stack-overflow"></i>
+                                Troubleshooting
+                            </a>
+                        </li>
+                        <li class="pull-right">
+                            <a href="javascript:void(0);">
+                                <div class="sparkline txt-color-pinkDark text-align-right" data-sparkline-height="18px"
+                                     data-sparkline-width="90px" data-sparkline-barwidth="7">
+                                    <canvas width="52" height="18"
+                                            style="display: inline-block; width: 52px; height: 18px; vertical-align: top;"></canvas>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div id="deviceDetailsTab0" class="tab-content padding-10">
+                        <div class="tab-pane fade active in" id="s0">
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>
+                                        Operation System Family:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.osFamily }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Current Uptime:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.uptime }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Hardware Model:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.model }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Software Version:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.version }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Hardware Serial:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.serial }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Proxy Node:
+                                    </td>
+                                    <td>
+                                        {{ deviceFacts.nodename }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="s1">
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>
+                                        Syslog Host:
+                                    </td>
+                                    <td>
+                                        {{ deviceDetails.syslog_host }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        NTP Host:
+                                    </td>
+                                    <td>
+                                        FIXME
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Telemetry Collector:
+                                    </td>
+                                    <td>
+                                        {{ deviceDetails.telemetry_host }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="s2">
+                                <p>
+                                    Performance
+                                </p>
+                            </div>
+                        <div class="tab-pane fade" id="s3">
+                                <form class="smart-form" #mainForm="ngForm" (ngSubmit)="executeTroubleshootingTool()">
+                                    <header>
+                                        Troubleshooting Tools:
+                                    </header>
+
+                                    <fieldset>
+                                        <section>
+                                            <label class="label">Tools:</label>
+                                            <label class="select">
+                                                <select class="form-control" id="tool_select"
+                                                        [(ngModel)]="tools.tool" #tools.tool="ngModel"
+                                                        name="tools.tool">
+                                                    <option value="interface">Interface Status</option>
+                                                    <option value="config">System Configuration</option>
+                                                    <option value="bgp">Show BGP Status</option>
+                                                    <option value="ospf">Show OSPF Neighbors</option>
+                                                    <option value="route">Show Route</option>
+                                                    <option value="ping">Ping</option>
+                                                    <option value="cli">CLI command</option>
+                                                </select>
+                                            </label>
+                                        </section>
+                                        <section>
+                                            <label class="label">Argument:</label>
+                                            <label class="input">
+                                                <input type="text" id="tools.arg"
+                                                       placeholder="show system process summary"
+                                                       class="input-sm" minlength="1" maxlength="50"
+                                                       name="arg" [(ngModel)]="tools.arg" #tools.arg="ngModel">
+                                            </label>
+                                        </section>
+                                        <section>
+
+                                        </section>
+                                    </fieldset>
+
+                                    <footer>
+                                        <button type="submit" class="btn btn-primary"
+                                                (click)="executeTroubleshootingTool()">
+                                            Execute
+                                        </button>
+                                    </footer>
+                                    <fieldset>
+                                        <section>
+                                            <label class="label">Results</label>
+                                            <label class="textarea">
+                                                <pre>{{ tools.output }}</pre>
+                                            </label>
+                                        </section>
+                                    </fieldset>
+                                </form>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Save Topology Modal -->
+    <div class="modal fade" id="saveTopology" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="saveTopologyLabel">Save Topology</h4>
+                </div>
+                <div class="modal-body">
+                    <form #topologyForm="ngForm" (ngSubmit)="saveTopology(topologyForm)" class="smart-form">
+                        <header>Save Topology</header>
+                        <fieldset>
+                            <section *ngIf="showSuccess">
+                                <div class="alert alert-success fade in">
+                                    <button class="close" (click)="showSuccess=false;" data-dismiss="alert">
+                                        ×
+                                    </button>
+                                    <i class="fa-fw fa fa-check"></i>
+                                    <strong>Success</strong> Added the Key
+                                </div>
+                            </section>
+                            <section *ngIf="showFail">
+                                <div class="alert alert-danger fade in">
+                                    <button class="close" (click)="showSuccess=false;" data-dismiss="alert">
+                                        ×
+                                    </button>
+                                    <i class="fa-fw fa fa-times"></i>
+                                    <strong>Error!</strong> There was an error
+                                </div>
+                            </section>
+                            <section>
+                                <label class="label">Topology Name:</label>
+                                <label class="input">
+                                    <input type="text" [(ngModel)]="topologyName" #key="ngModel" name="topologyName"
+                                           class="input-sm">
+                                </label>
+                            </section>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    (click)="postForm.reset(); showSuccess=false;">
+                                Clear
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Load Topology Modal -->
+    <div class="modal fade" id="loadTopology" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loadTopologyLabel">Load Topology</h4>
+                </div>
+                <div class="modal-body">
+                    <form #loadTopologyForm="ngForm" (ngSubmit)="loadTopologyManual(loadTopologyForm)"
+                          class="smart-form">
+                        <header>Load Topology</header>
+                        <fieldset>
+                            <section>
+                                <label class="label">Topology Name:</label>
+                                <label class="input">
+                                    <input type="text" [(ngModel)]="loadTopologyName" #key="ngModel"
+                                           name="loadTopologyName"
+                                           class="input-sm">
+                                </label>
+                            </section>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Load
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    (click)="loadTopologyForm.reset()">
+                                Clear
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Network Device Modal -->
+    <div class="modal fade" id="addNetworkDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addIconLabel">Add Device</h4>
+                </div>
+                <div class="modal-body">
+                    <form #addNetworkDeviceForm="ngForm" (ngSubmit)="addNetworkDevice(addNetworkDeviceForm)"
+                          class="smart-form">
+                        <header>Add Network Device</header>
+                        <fieldset>
+                            <section>
+                                <label class="label">Device Name:</label>
+                                <label class="input">
+                                    <input type="text" [(ngModel)]="addNetworkDeviceParams.name" #key="ngModel"
+                                           name="addNetworkDeviceParams.name"
+                                           class="input-sm">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Management IP:</label>
+                                <label class="input">
+                                    <input type="text" [(ngModel)]="addNetworkDeviceParams.ip" #key="ngModel"
+                                           name="addNetworkDeviceParams.ip"
+                                           class="input-sm">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Type:</label>
+                                <label class="select">
+                                    <select class="form-control" id="select-1"
+                                            [(ngModel)]="addNetworkDeviceParams.icon_type" #key="ngModel"
+                                            name="addNetworkDeviceParams.icon_type">
+                                        <option value="/assets/img/server.png:25:50">Server</option>
+                                        <option value="/assets/img/mx_large.png:50:50">MX Large</option>
+                                        <option value="/assets/img/mx_small.png:50:25">MX Small</option>
+                                        <option value="/assets/img/switch.png:50:20">Switch</option>
+                                        <option value="/assets/img/router.png:50:50">Router</option>
+                                        <option value="/assets/img/switch_chassis.png:50:50">Switch Chassis</option>
+                                    </select>
+                                </label>
+                            </section>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Add
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    (click)="addNetworkDeviceForm.reset()">
+                                Clear
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

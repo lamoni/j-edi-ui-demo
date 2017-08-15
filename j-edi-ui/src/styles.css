@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* #GOOGLE FONT */
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700");
+::-webkit-input-placeholder {
+   font-style: italic;
+   opacity: 0.5;
+}
+:-moz-placeholder {
+   font-style: italic;
+   opacity: 0.5;
+}
+::-moz-placeholder {
+   font-style: italic;  
+   opacity: 0.5;
+}
+:-ms-input-placeholder {  
+   font-style: italic;
+   opacity: 0.5; 
+}
+.smart-form .ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+.smart-form .ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+.smart-form footer .btn:disabled {
+    cursor: not-allowed;
+}
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.myHidden {
+  display: none;
+}
+.myShown {
+  display:block;
+}

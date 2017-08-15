@@ -1,0 +1,27 @@
+<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
+    <sa-widget [name]="graph.id">
+        <!-- widget options:
+                        usage: <sa-widget id="wid-id-0" [editbutton]="false">
+                        [colorbutton]="false"
+                        [editbutton]="false"
+                        [togglebutton]="false"
+                        [deletebutton]="false"
+                        [fullscreenbutton]="false"
+                        [custombutton]="false"
+                        [collapsed]="true"
+                        [sortable]="false"
+                    -->
+        <header>
+            <h2>{{graph.title}}</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+            <!-- widget content -->
+            <div class="widget-body ">
+                <sa-flot-chart [data]="graph.flotData.chartData" [options]="siteStatsDemoOptions"></sa-flot-chart>
+            </div>
+            <!-- end widget content -->
+        </div>
+        <!-- end widget div -->
+    </sa-widget>
+</article>

@@ -1,0 +1,45 @@
+<div id="content">
+    <div class="row">
+        <sa-big-breadcrumbs [items]="['Home']" icon="home" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></sa-big-breadcrumbs>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="well">
+
+                <h1>J-EDI</h1>
+                <p>
+                    J-EDI is an example project that leverages SaltStack as the event broker and "glues" together disparate, automated workflows
+                    that are usually run by human beings. This repo contains all Saltstack state files, scripts and configuration
+                    files to run these workflows together by starting each workflow based on a pre-defined event that is
+                    created by any number of other workflows. Each workflow, in turn, creates an event so that if workflows
+                    need to start based on output from another workflow, they can do that automatically.
+                </p>
+                <div class="row">
+                    <!--<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <iframe src="https://snapshot.raintank.io/dashboard-solo/snapshot/y7zwi2bZ7FcoTlB93WN7yWO4aMiz3pZb?from=1493369923321&to=1493377123321&panelId=4" width="650" height="300" frameborder="0"></iframe>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <iframe src="http://localhost:9082/dashboard-solo/file/data_streaming_collector_dashboard.json?from=1495039369497&to=1495042969498&var-host_regex=All&var-interface=All&var-GroupBy=%24__auto_interval&panelId=3" width="450" height="200" frameborder="0"></iframe>
+                    </div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" (click)="addGraph()">Add Graph</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" (click)="addForm()">Add Form</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <sa-widgets-grid>
+            <div class="row">
+                <div class="col-sm-12">
+                    <jedi-wdgt-cntnr></jedi-wdgt-cntnr>
+                </div>
+            </div>
+        </sa-widgets-grid>
+    </div>
+</div>
